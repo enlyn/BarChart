@@ -158,7 +158,7 @@ struct YAxisView: View {
     }
     
     func tickPoints(y: CGFloat) -> (CGPoint, CGPoint) {
-        let endPointX = self.frameSize.width - self.yAxis.maxLabelWidth
-        return (CGPoint(x: 0, y: y), CGPoint(x: endPointX, y: y))
+//        let endPointX = self.frameSize.width - self.yAxis.maxLabelWidth
+        return (CGPoint(x: self.yAxis.maxLabelWidth, y: y), CGPoint(x: self.frameSize.width, y: y))
     }
 }
