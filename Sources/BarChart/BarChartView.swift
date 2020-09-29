@@ -35,6 +35,7 @@ public struct SelectableBarChartView<SelectionView: View> : View {
     
     public init(config: ChartConfiguration) {
         self.config = config
+      self.xAxis.leftSpacing = self.yAxis.maxLabelWidth
     }
     
     init(config: ChartConfiguration,

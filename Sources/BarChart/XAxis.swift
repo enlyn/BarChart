@@ -32,19 +32,22 @@ struct XAxis: Identifiable {
     let frameWidth: CGFloat
     let ref: XAxisReference
     let labelsCTFont: CTFont
+  var leftSpacing: CGFloat
     
     var layout: XAxisLayout {
-        XAxisLayout(frameWidth: self.frameWidth, dataCount: self.data.count)
+      XAxisLayout(leftSpacing: self.leftSpacing, frameWidth: self.frameWidth, dataCount: self.data.count)
     }
         
     init(frameWidth: CGFloat = 0,
          data: [ChartDataEntry] = [],
          ref: XAxisReference = XAxisReference(),
-         labelsCTFont: CTFont = ChartConfiguration.defaultLabelsCTFont) {
+         labelsCTFont: CTFont = ChartConfiguration.defaultLabelsCTFont,
+         leftSpacing: CGFloat = 0) {
         self.labelsCTFont = labelsCTFont
         self.frameWidth = frameWidth
         self.data = data
         self.ref = ref
+      self.leftSpacing = leftSpacing
     }
     
     func chartEntry(at index: Int) -> ChartDataEntry {

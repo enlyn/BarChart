@@ -34,7 +34,7 @@ struct BarChartCollectionView: View {
     @Binding var selectionCallback: ((ChartDataEntry, CGPoint) -> Void)?
     
     var body: some View {
-        HStack(alignment: .bottom, spacing: self.xAxis.layout.spacing ?? 0) {
+      return HStack(alignment: .bottom, spacing: self.xAxis.layout.spacing ?? self.yAxis.maxLabelWidth) {
             if self.xAxis.layout.barWidth != nil {
                 ForEach(0..<self.yAxis.normalizedValues().count, id: \.self) { index in
                     BarChartCell(width: self.xAxis.layout.barWidth!,
@@ -51,14 +51,15 @@ struct BarChartCollectionView: View {
                 }
             }
         }
+        .padding(.leading, self.yAxis.maxLabelWidth + 10)
     }
     
-    func barTopCentre(at index: Int) -> CGPoint {
-        let x = self.xAxis.layout.barCentre(at: index)!
-        let value = CGFloat(self.yAxis.normalizedValues()[index])
-        let y = self.calculateTopOffset(for: value)
-        return CGPoint(x: x, y: y)
-    }
+  func barTopCentre(at index: Int) -> CGPoint {
+    let x = self.xAxis.layout.barCentre(at: index)!
+    let value = CGFloat(self.yAxis.normalizedValues()[index])
+    let y = self.calculateTopOffset(for: value)
+    return CGPoint(x: x, y: y)
+  }
     
     func offsetY() -> CGFloat {
         guard let maxNormalizedValue = self.yAxis.normalizedValues().max() else { return 0 }
@@ -67,12 +68,12 @@ struct BarChartCollectionView: View {
         return self.calculateTopOffset(for: absoluteMax)
     }
     
-    func calculateTopOffset(for value: CGFloat) -> CGFloat {
-        guard let centre = self.yAxis.centre() else { return 0 }
-        let maxBarHeight = value * self.yAxis.frameHeight
-        let topPadding = String().height(ctFont: self.xAxis.labelsCTFont) / 2
-        return self.yAxis.frameHeight - abs(centre) - maxBarHeight + topPadding
-    }
+  func calculateTopOffset(for value: CGFloat) -> CGFloat {
+    guard let centre = self.yAxis.centre() else { return 0 }
+    let maxBarHeight = value * self.yAxis.frameHeight
+    let topPadding = String().height(ctFont: self.xAxis.labelsCTFont) / 2
+    return self.yAxis.frameHeight - abs(centre) - maxBarHeight + topPadding
+  }
     
     func barHeight(at index: Int) -> CGFloat {
         return CGFloat(self.yAxis.normalizedValues()[index]) * self.yAxis.frameHeight

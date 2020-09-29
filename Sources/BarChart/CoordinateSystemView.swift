@@ -37,7 +37,8 @@ struct CoordinateSystemView: View {
                 YAxisView(yAxis: self.yAxis,
                           frameSize: self.frameSize)
                 XAxisView(xAxis: self.xAxis,
-                          frameSize: self.frameSize)
+                          frameSize: self.frameSize,
+                          leftSpacing: self.yAxis.maxLabelWidth + 10)
             }
         }
     }
@@ -80,6 +81,7 @@ struct LabelView: View {
 struct XAxisView: View {
     let xAxis: XAxis
     let frameSize: CGSize
+  let leftSpacing: CGFloat
     
     var body: some View {
         ForEach((0..<self.xAxis.formattedLabels().count), id: \.self) { index in
@@ -105,8 +107,8 @@ struct XAxisView: View {
     func tickX(at index: Int) -> CGFloat {
         let chartEntry = self.xAxis.chartEntry(at: index)
         guard let indexAtFullRange = self.xAxis.data.firstIndex(where: { $0 == chartEntry }),
-            let centre = self.xAxis.layout.barCentre(at: indexAtFullRange) else { return 0 }
-        return centre
+              let centre = self.xAxis.layout.barCentre(at: indexAtFullRange) else { return self.leftSpacing }
+      return centre + self.leftSpacing
     }
     
     func tickPoints(index: Int) -> (CGPoint, CGPoint) {
@@ -125,14 +127,15 @@ struct YAxisView: View {
     var body: some View {
         ForEach((0..<self.yAxis.formattedLabels().count), id: \.self) { index in
             HStack(alignment: .center) {
-                TickView(points: self.tickPoints(index: index),
-                         dash: self.yAxis.labelValue(at: index) == 0 ? [] : self.yAxis.ref.ticksDash,
-                         color: self.yAxis.ref.ticksColor,
-                         isInverted: true)
-                LabelView(text: self.yAxis.formattedLabels()[index],
-                          ctFont: self.yAxis.labelsCTFont,
-                          color: self.yAxis.ref.labelsColor)
-                    .offset(y: self.labelOffsetY(at: index))
+              LabelView(text: self.yAxis.formattedLabels()[index],
+                        ctFont: self.yAxis.labelsCTFont,
+                        color: self.yAxis.ref.labelsColor)
+                .offset(y: self.labelOffsetY(at: index))
+              
+              TickView(points: self.tickPoints(index: index),
+                       dash: self.yAxis.labelValue(at: index) == 0 ? [] : self.yAxis.ref.ticksDash,
+                       color: self.yAxis.ref.ticksColor,
+                       isInverted: true)
             }
         }
     }
@@ -158,7 +161,7 @@ struct YAxisView: View {
     }
     
     func tickPoints(y: CGFloat) -> (CGPoint, CGPoint) {
-//        let endPointX = self.frameSize.width - self.yAxis.maxLabelWidth
-        return (CGPoint(x: self.yAxis.maxLabelWidth, y: y), CGPoint(x: self.frameSize.width, y: y))
+        let endPointX = self.frameSize.width - self.yAxis.maxLabelWidth
+        return (CGPoint(x: 0, y: y), CGPoint(x: endPointX, y: y))
     }
 }
