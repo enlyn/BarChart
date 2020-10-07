@@ -132,7 +132,7 @@ struct YAxisView: View {
                         ctFont: self.yAxis.labelsCTFont,
                         color: self.yAxis.ref.labelsColor)
                 .offset(y: self.labelOffsetY(at: index))
-                .frame(width: self.yAxis.maxLabelWidth)
+                .frame(width: self.yAxis.maxLabelWidth, alignment: .trailing)
                 .multilineTextAlignment(.trailing)
               
               TickView(points: self.tickPoints(index: index),
