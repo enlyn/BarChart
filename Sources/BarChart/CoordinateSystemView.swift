@@ -132,6 +132,8 @@ struct YAxisView: View {
                         ctFont: self.yAxis.labelsCTFont,
                         color: self.yAxis.ref.labelsColor)
                 .offset(y: self.labelOffsetY(at: index))
+                .frame(width: self.yAxis.maxLabelWidth)
+                .multilineTextAlignment(.trailing)
               
               TickView(points: self.tickPoints(index: index),
                        dash: self.yAxis.labelValue(at: index) == 0 ? [] : self.yAxis.ref.ticksDash,
@@ -163,7 +165,6 @@ struct YAxisView: View {
     
     func tickPoints(y: CGFloat) -> (CGPoint, CGPoint) {
       let endPointX = self.frameSize.width - self.yAxis.maxLabelWidth
-//      let endPointX = self.frameSize.width
-      return (CGPoint(x: self.yAxis.maxLabelWidth, y: y), CGPoint(x: endPointX, y: y))
+      return (CGPoint(x: 0, y: y), CGPoint(x: endPointX, y: y))
     }
 }
