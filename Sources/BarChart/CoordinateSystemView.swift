@@ -108,8 +108,8 @@ struct XAxisView: View {
         let chartEntry = self.xAxis.chartEntry(at: index)
         guard let indexAtFullRange = self.xAxis.data.firstIndex(where: { $0 == chartEntry }),
               let centre = self.xAxis.layout.barCentre(at: indexAtFullRange) else { return self.leftSpacing }
-//      return centre + self.leftSpacing
-      return self.leftSpacing
+      return centre + self.leftSpacing
+//      return self.leftSpacing
     }
     
     func tickPoints(index: Int) -> (CGPoint, CGPoint) {
@@ -162,8 +162,8 @@ struct YAxisView: View {
     }
     
     func tickPoints(y: CGFloat) -> (CGPoint, CGPoint) {
-//        let endPointX = self.frameSize.width - self.yAxis.maxLabelWidth
-      let endPointX = self.frameSize.width
-      return (CGPoint(x: 0, y: y), CGPoint(x: endPointX, y: y))
+      let endPointX = self.frameSize.width - self.yAxis.maxLabelWidth
+//      let endPointX = self.frameSize.width
+      return (CGPoint(x: self.yAxis.maxLabelWidth, y: y), CGPoint(x: endPointX, y: y))
     }
 }
